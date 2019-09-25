@@ -2,7 +2,7 @@ import os
 import random
 import shutil
 
-ProgrammaURL = "C:/Users/aenge/OneDrive/Bureaublad/python/Overhoor Programma"
+ProgrammaURL = "C:/Users/aenge/OneDrive/Documenten/GitHub/Overhoor-Programma"
 goed = 0
 fout = 0
 cijfer = 1
@@ -137,7 +137,7 @@ def kies_lijst(lijst_naam):
     update_txts()
     lijst_naam = lijst_naam + ".txt"
     if (lijst_naam in update_txts()):
-        print(" ")
+        leeg_scherm()
         print("lijst gevonden: " + lijst_naam)
         global lijst_path
         lijst_path = "/lijsten/" + lijst_naam
