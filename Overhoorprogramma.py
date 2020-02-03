@@ -199,10 +199,7 @@ def show_words():
 
 def leeg_scherm():
     print("\n" * 100)
-
-def lees_woordenlijst(BESTANDSNAAM):
-    return
-
+    
 def main():
     menu_show()
     global keuze
