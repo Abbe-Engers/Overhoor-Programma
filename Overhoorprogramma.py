@@ -2,7 +2,7 @@ import os
 import random
 import shutil
 
-ProgrammaURL = "Hier jouw programma url!"
+ProgrammaURL = input("Hier jouw programma url!")
 goed = 0
 fout = 0
 cijfer = 1
