@@ -2,22 +2,7 @@ import os
 import random
 import shutil
 
-ProgrammaURL = input("Hier jouw programma url!")
-goed = 0
-fout = 0
-cijfer = 1
-keuze = ""
-overhoor_woord = 1
-lijst_path = ""
-splitter = 1
-lijst = []
-overhoor_lijst_lijst = []
-one_lijst = []
-two_lijst = []
-one_lijst_naam = ""
-two_lijst_naam = ""
-volgorde_lijst = ""
-txts = ""
+ProgrammaURL = "Uw programma URL hier!"
 
 def menu_show():
     print("========================")
@@ -29,28 +14,33 @@ def menu_show():
     print("| m: maak lijst aan    |")
     print("========================")
     print(" ")
-    global keuze
-    keuze = input(": ")
+
+    return input(": ")
 
 def update_txts():
     txts = os.listdir("./lijsten")
     return txts
 
-def volgorde_lijst_function():
-    one_lijst_naam = one_lijst[0]
-    two_lijst_naam = two_lijst[0]
+def volgorde_lijst_function(one_lijst_, two_lijst_):
+    one_lijst_naam = one_lijst_[0]
+    two_lijst_naam = two_lijst_[0]
     print(" ")
     print("1: " + one_lijst_naam + ". 2: " + two_lijst_naam)
-    print("bijv: 1-2 of 2-1")
-    global volgorde_lijst
+    print("Kies: 1-2 of 2-1")
     volgorde_lijst = input("Volgorde: ")
+    leeg_scherm()
     return volgorde_lijst
 
-def overhoor_lijst():
-    global cijfer
-    global keuze
-    global goed
-    global fout
+def overhoor_lijst(volgorde_lijst_, one_lijst_, two_lijst_, goed_, fout_, overhoor_woord_, overhoor_lijst_lijst):
+    volgorde_lijst = volgorde_lijst_
+    overhoor_woord = overhoor_woord_
+    overhoor_lijst_lijst = overhoor_lijst_lijst
+    one_lijst = one_lijst_
+    two_lijst = two_lijst_
+    cijfer = 1
+    keuze = ""
+    goed = goed_
+    fout = fout_
     if (volgorde_lijst == "2-1"):
         if (len(one_lijst) > 1):
             overhoor_key = random.randint(1, (len(one_lijst)-1))
@@ -64,7 +54,7 @@ def overhoor_lijst():
                 leeg_scherm()
                 goed += 1
                 print(goed)
-                overhoor_lijst()
+                overhoor_lijst(volgorde_lijst, one_lijst, two_lijst, goed, fout, overhoor_woord, overhoor_lijst_lijst)
                 return
 
             else:
@@ -72,7 +62,7 @@ def overhoor_lijst():
                 print("Fout antwoord!")
                 fout += 1
                 print("\n" * 10)
-                overhoor_lijst()
+                overhoor_lijst(volgorde_lijst, one_lijst, two_lijst, goed, fout, overhoor_woord, overhoor_lijst_lijst)
 
         else:
             if (goed == 0 or goed < 0):
@@ -98,7 +88,7 @@ def overhoor_lijst():
                 two_lijst.remove(two_lijst[overhoor_key])
                 leeg_scherm()
                 goed += 1
-                overhoor_lijst()
+                overhoor_lijst(volgorde_lijst, one_lijst, two_lijst, goed, fout, overhoor_woord, overhoor_lijst_lijst)
                 return
 
 
@@ -107,7 +97,7 @@ def overhoor_lijst():
                 print("Fout antwoord!")
                 fout += 1
                 print("\n" * 10)
-                overhoor_lijst()
+                overhoor_lijst(volgorde_lijst, one_lijst, two_lijst, goed, fout, overhoor_woord, overhoor_lijst_lijst)
 
         else:
             if (goed == 0 or goed < 0):
@@ -134,36 +124,31 @@ def show_lijsten():
         print(i)
 
 def kies_lijst(lijst_naam):
-    update_txts()
+    lijst_path = ""
     lijst_naam = lijst_naam + ".txt"
     if (lijst_naam in update_txts()):
-        leeg_scherm()
-        print("lijst gevonden: " + lijst_naam)
-        global lijst_path
         lijst_path = "/lijsten/" + lijst_naam
         with open("." + lijst_path) as f:
-            global lijst
             lijst = f.read().split()
-            return lijst
+            return lijst, lijst_path
     else:
         print("Kan de opgevraagde lijst helaas niet vinden, probeer opnieuw.")
         lijst_path = ""
         return
     return
 
-def split_words():
-    global two_lijst
-    global one_lijst
-    one_lijst.clear()
-    two_lijst.clear()
-    for word in lijst:
-        global splitter
+def split_words(lijst_):
+    one_lijst = []
+    two_lijst = []
+    splitter = 1
+    for word in lijst_:
         if (splitter >= 2):
             two_lijst.append(word)
             splitter = 1
         else:
             one_lijst.append(word)
             splitter = 2
+    return one_lijst, two_lijst
 
 def del_words():
     if (os.path.isdir(ProgrammaURL + "/lijsten/Prullenbak")):
@@ -180,80 +165,60 @@ def del_prullenbak():
     if (os.path.isdir(ProgrammaURL + "/lijsten/Prullenbak")):
         shutil.rmtree(ProgrammaURL + "/lijsten/Prullenbak")
 
-def add_words():
-    os.startfile(ProgrammaURL + lijst_path)
+def add_words(lijst_naam):
+    os.startfile(ProgrammaURL + kies_lijst(lijst_naam)[1])
     leeg_scherm()
     input("druk enter: ")
-    with open("." + lijst_path) as f:
-        global lijst
-        lijst = f.read().split()
-    split_words()
     return
-
-def show_words():
-    print(lijst)
-    print(" ")
-    print(two_lijst)
-    print(" ")
-    print(one_lijst)
 
 def leeg_scherm():
     print("\n" * 100)
-    
-def main():
-    menu_show()
-    global keuze
+
+def lees_woordenlijst(BESTANDSNAAM):
+    return
+
+def main(i_):
+    i = i_
+    keuze = menu_show()
+
     if (keuze == "s"):
         leeg_scherm()
-        for i in range(len(one_lijst)):
-            print(one_lijst[i] + (" "*(20-len(one_lijst[i]))) + "   :   " + two_lijst[i])
+        for k in range(len(split_words(kies_lijst(i)[0])[0])):
+            print(split_words(kies_lijst(i)[0])[0][k] + (" "*(20-len(split_words(kies_lijst(i)[0])[0][k]))) + "   :   " + split_words(kies_lijst(i)[0])[1][k])
         print("\n")
-        keuze = " "
-        main()
+        main(i)
 
     if (keuze == "k"):
         leeg_scherm()
         show_lijsten()
         print("\n" * 2)
         i = input("keuze: ")
-        kies_lijst(i)
-        split_words()
+        split_words(kies_lijst(i)[0])
         print("\n" * 8)
-        main()
+        main(i)
 
     if (keuze == "e"):
-        add_words()
+        add_words(i)
         leeg_scherm()
-        main()
-        keuze = " "
+        main(i)
 
     if (keuze == "d"):
         del_words()
         leeg_scherm()
-        main()
-        keuze = " "
+        main(i)
 
     if (keuze == "m"):
         leeg_scherm()
         maak_lijst()
-        main()
-        keuze = " "
+        main(i)
 
     if (keuze == "o"):
-        global goed
-        global fout
         leeg_scherm()
-        goed = 0
-        fout = 0
-        split_words()
-        volgorde_lijst_function()
-        leeg_scherm()
-        overhoor_lijst()
-        keuze = " "
-        main()
+        overhoor_lijst(volgorde_lijst_function(split_words(kies_lijst(i)[0])[0], split_words(kies_lijst(i)[0])[1]), split_words(kies_lijst(i)[0])[0], split_words(kies_lijst(i)[0])[1], 0, 0, 1, [])
+        main(i)
 
     del_prullenbak()
 
 del_prullenbak()
 leeg_scherm()
-main()
+main("")
